@@ -1,0 +1,264 @@
+' función que retorna el valor en texto
+Public Function fn_G_strConvierteCantidad(strCantidad As String) As String
+On Error GoTo errorcon
+    Dim strCantidadAuxiliar As String
+    Dim strCantidadPrincipal As String
+    Dim intLongitud As Integer
+    Dim intBucle As Integer
+    Dim intBucleAuxiliar As Integer
+    Dim intEstado As Integer
+    Dim h As Long
+    Dim contar As Long
+    Dim intContador As Integer
+    Dim intBandera As Integer
+    Dim aux As String
+    Dim strCifra As String
+    
+   
+    strCifra = ""
+    strCantidad = FormatNumber(Val(strCantidad), 2, vbTrue, vbFalse, vbFalse)
+    strCantidadPrincipal = strCantidad
+    strCantidadAuxiliar = strCantidad
+    intLongitud = Len(strCantidadPrincipal)
+    For intBucle = 1 To intLongitud
+        If Mid(strCantidadPrincipal, intBucle, 1) = "." Then
+            intBucleAuxiliar = intBucle
+        End If
+    Next intBucle
+    strCantidadAuxiliar = Mid(strCantidadAuxiliar, intBucleAuxiliar + 1, intLongitud)
+    strCantidadPrincipal = Mid(strCantidadPrincipal, 1, intBucleAuxiliar - 1)
+    intLongitud = Len(strCantidadPrincipal)
+    h = Len(strCantidadPrincipal)
+    contar = 0
+    For intBucle = 1 To Len(strCantidadPrincipal)
+    intContador = 0
+    intBandera = 0
+        Select Case Mid(strCantidadPrincipal, intBucle, 1)
+            Case "0":
+                    intContador = 0
+            Case "1":
+                If intLongitud = 3 And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" And Mid(strCantidadPrincipal, intBucle + 2, 1) = "0" And intBandera = 0 Then
+                    strCifra = strCifra & "Cien "
+                    intContador = 1
+                    intBandera = 1
+                Else
+                    If intLongitud = 9 Or intLongitud = 3 Or intLongitud = 6 And intBandera = 0 Then
+                        strCifra = strCifra & "Ciento "
+                        intContador = 1
+                        intBandera = 1
+                    End If
+                End If
+                If intBucleAuxiliar > 1 And intBucle > 1 And intBandera = 0 Then
+                    If (intLongitud = 7 Or intLongitud = 1 Or intLongitud = 4) Then 'And (Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Or Mid(strCantidadPrincipal, intBucle - 1, 1) = "0") Then
+                        strCifra = strCifra & "Un "
+                        intContador = 0
+                        intBandera = 1
+                    Else
+                        If intLongitud = 1 And intBandera = 0 Then
+                            strCifra = strCifra & "Uno "
+                            intContador = 1
+                            intBandera = 1
+                        End If
+                    End If
+                    If intLongitud = 7 Then
+                        strCifra = strCifra & "Millones "
+                        intContador = 1
+                    End If
+                    
+                Else
+                    If intLongitud = 1 And intBandera = 0 Then
+                         strCifra = strCifra & "Un "
+                         contar = 1
+                         intContador = 1
+                         intBandera = 1
+                    End If
+                    If intLongitud > 1 Then
+                        If intLongitud = 7 And Mid(strCantidadPrincipal, intLongitud, 1) = "0" And Mid(strCantidadPrincipal, intLongitud - 1, 1) = "0" And intBandera = 0 Then
+                             strCifra = strCifra & "Un Millon De "
+                             intContador = 1
+                             intBandera = 1
+                        Else
+                            If intLongitud = 7 And intBandera = 0 Then
+                             strCifra = strCifra & "Un Millon "
+                             intContador = 1
+                             intBandera = 1
+                            End If
+                        End If
+                        If intLongitud = 9 And Mid(strCantidadPrincipal, intLongitud, 1) = "0" And Mid(strCantidadPrincipal, intLongitud - 1, 1) = "0" And intBandera = 0 Then
+                             strCifra = strCifra & "Un Millones De "
+                             intContador = 1
+                             intBandera = 1
+                        Else
+                            If intLongitud = 9 And intBandera = 0 Then
+                             strCifra = strCifra & "Un Millones "
+                             intContador = 1
+                             intBandera = 1
+                            End If
+                        End If
+                        
+                    End If
+                End If
+                If intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5 Then
+                    Select Case Mid(strCantidadPrincipal, intBucle + 1, 1)
+                        Case "0":
+                            strCifra = strCifra & "Diez "
+                        Case "1":
+                            strCifra = strCifra & "Once "
+                        Case "2":
+                            strCifra = strCifra & "Doce "
+                        Case "3":
+                            strCifra = strCifra & "Trece "
+                        Case "4":
+                            strCifra = strCifra & "Catorce "
+                        Case "5":
+                            strCifra = strCifra & "Quince "
+                        Case "6":
+                            strCifra = strCifra & "Dieciseis "
+                        Case "7":
+                            strCifra = strCifra & "Diecisiete "
+                        Case "8":
+                            strCifra = strCifra & "Dieciocho "
+                        Case "9":
+                            strCifra = strCifra & "Diecinueve "
+                    End Select
+                    intBucle = intBucle + 1
+                    intLongitud = intLongitud - 1
+                End If
+            Case "2":
+                If intLongitud = 10 Or intLongitud = 9 Or intLongitud = 7 Or intLongitud = 1 Or intLongitud = 3 Or intLongitud = 4 Or intLongitud = 6 Then
+                    strCifra = strCifra & "Dos"
+                Else
+                    If (intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5) And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Then
+                        strCifra = strCifra & "Veinte "
+                    Else
+                        strCifra = strCifra & "Veinte y "
+                    End If
+                End If
+            Case "3":
+                If intLongitud = 10 Or intLongitud = 9 Or intLongitud = 7 Or intLongitud = 1 Or intLongitud = 3 Or intLongitud = 4 Or intLongitud = 6 Then
+                    strCifra = strCifra & "Tres"
+                Else
+                    If (intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5) And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Then
+                        strCifra = strCifra & "Treinta "
+                    Else
+                        strCifra = strCifra & "Treinta y "
+                    End If
+                End If
+            Case "4":
+                If intLongitud = 10 Or intLongitud = 9 Or intLongitud = 7 Or intLongitud = 1 Or intLongitud = 3 Or intLongitud = 4 Or intLongitud = 6 Then
+                    strCifra = strCifra & "Cuatro"
+                Else
+                    If (intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5) And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Then
+                        strCifra = strCifra & "Cuarenta "
+                    Else
+                        strCifra = strCifra & "Cuarenta y "
+                    End If
+                End If
+            Case "5":
+                If intLongitud = 9 Or intLongitud = 3 Or intLongitud = 6 Then
+                    strCifra = strCifra & "Quinientos "
+                    intContador = 1
+                Else
+                    If intLongitud = 10 Or intLongitud = 7 Or intLongitud = 1 Or intLongitud = 4 Then
+                        strCifra = strCifra & "Cinco "
+                    Else
+                        aux = Mid(strCantidadPrincipal, intBucle + 1, 1)
+                        If (intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5) And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Then
+                            strCifra = strCifra & "Cincuenta "
+                        Else
+                            strCifra = strCifra & "Cincuenta y "
+                        End If
+                    End If
+                End If
+            Case "6":
+                If intLongitud = 10 Or intLongitud = 9 Or intLongitud = 7 Or intLongitud = 1 Or intLongitud = 3 Or intLongitud = 4 Or intLongitud = 6 Then
+                    strCifra = strCifra & "Seis"
+                Else
+                    If (intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5) And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Then
+                        strCifra = strCifra & "Sesenta "
+                    Else
+                        strCifra = strCifra & "Sesenta y "
+                    End If
+                End If
+            Case "7":
+                If intLongitud = 3 Then
+                    strCifra = strCifra & "SeteCientos "
+                    intContador = 1
+                Else
+                    If intLongitud = 10 Or intLongitud = 9 Or intLongitud = 7 Or intLongitud = 1 Or intLongitud = 4 Or intLongitud = 6 Then
+                        strCifra = strCifra & "Siete "
+                    Else
+                        aux = Mid(strCantidadPrincipal, intBucle + 1, 1)
+                        If (intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5) And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Then
+                            strCifra = strCifra & "Setenta "
+                        Else
+                            strCifra = strCifra & "Setenta y "
+                        End If
+                    End If
+                End If
+            Case "8":
+                If intLongitud = 10 Or intLongitud = 9 Or intLongitud = 7 Or intLongitud = 1 Or intLongitud = 3 Or intLongitud = 4 Or intLongitud = 6 Then
+                    strCifra = strCifra & "Ocho"
+                Else
+                    If (intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5) And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Then
+                        strCifra = strCifra & "Ochenta "
+                    Else
+                        strCifra = strCifra & "Ochenta y "
+                    End If
+                End If
+            Case "9":
+                If intLongitud = 9 Or intLongitud = 3 Or intLongitud = 6 Then
+                    strCifra = strCifra & "Nove"
+                Else
+                    If intLongitud = 10 Or intLongitud = 7 Or intLongitud = 1 Or intLongitud = 4 Then
+                        strCifra = strCifra & "Nueve "
+                    Else
+                        If (intLongitud = 8 Or intLongitud = 2 Or intLongitud = 5) And Mid(strCantidadPrincipal, intBucle + 1, 1) = "0" Then
+                            strCifra = strCifra & "Noventa "
+                        Else
+                            strCifra = strCifra & "Noventa y "
+                        End If
+                    End If
+                End If
+        End Select
+        If (intLongitud = 9 Or intLongitud = 3 Or intLongitud = 6) And intContador = 0 And Mid(strCantidadPrincipal, intBucle, 1) <> 0 Then
+            strCifra = strCifra & "cientos "
+        End If
+        If (intLongitud = 10 Or intLongitud = 4) And intContador = 0 Then
+            If intLongitud = 10 And (Mid(strCantidadPrincipal, intBucle, 1) = "1" Or Mid(strCantidadPrincipal, intBucle, 1) = "2" Or Mid(strCantidadPrincipal, intBucle, 1) = "3" Or Mid(strCantidadPrincipal, intBucle, 1) = "4" Or Mid(strCantidadPrincipal, intBucle, 1) = "5" Or Mid(strCantidadPrincipal, intBucle, 1) = "6" Or Mid(strCantidadPrincipal, intBucle, 1) = "7" Or Mid(strCantidadPrincipal, intBucle, 1) = "8" Or Mid(strCantidadPrincipal, intBucle, 1) = "9") Then
+                strCifra = strCifra & " Mil Millones "
+            Else
+                strCifra = strCifra & " Mil "
+            End If
+            
+        End If
+        If intLongitud = 7 And intContador = 0 Then
+            strCifra = strCifra & " Millones "
+        End If
+        intLongitud = intLongitud - 1
+    Next intBucle
+    intContador = 0
+    strCantidadPrincipal = strCantidadAuxiliar
+    strCifra = strCifra & " CON " & strCantidadPrincipal & "/100 "
+    intLongitud = Len(strCantidadPrincipal)
+    If contar = 1 Then
+        If Val(strCantidadAuxiliar) = 0 Then
+            strCifra = strCifra & " Dolar "
+        Else
+            strCifra = strCifra & " Dolar "
+        End If
+    Else
+        If Val(strCantidadAuxiliar) = 0 Then
+            strCifra = strCifra & " Dolares "
+        Else
+            strCifra = strCifra & " Dolares "
+        End If
+    End If
+    'strCifra = Format(strCifra, ">")
+    fn_G_strConvierteCantidad = Format(LTrim(RTrim(strCifra)), ">")
+    
+errorcon:
+    If Err.Description <> "" Then
+        MsgBox Err.Description
+    End If
+End Function
